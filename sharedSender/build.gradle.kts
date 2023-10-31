@@ -20,7 +20,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":shared"))
+                api(project(":shared"))
 
                 with(compose) {
                     implementation(ui)
@@ -57,14 +57,18 @@ kotlin {
 }
 
 android {
-    namespace = "${Config.namespace}.sender"
+    namespace = Config.packageSender
     compileSdk = Config.Android.compileSdk
     defaultConfig {
         minSdk = Config.Android.minSdk
     }
+    compileOptions {
+        sourceCompatibility = Config.javaVersion
+        targetCompatibility = Config.javaVersion
+    }
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "${Config.namespace}.sender"
+    multiplatformResourcesPackage = Config.packageSender
     multiplatformResourcesClassName = "SenderRes"
 }

@@ -52,7 +52,7 @@ kotlin {
                     implementation(resourcesCompose)
                 }
 
-                implementation(Dependencies.kermit)
+                api(Dependencies.kermit)
             }
         }
         val commonTest by getting

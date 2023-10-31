@@ -5,8 +5,8 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-group = "${Config.namespace}.receiver"
-version = "1.0-SHAPSHOT"
+group = Config.packageReceiver
+version = Config.version
 
 kotlin {
     jvm {
@@ -35,7 +35,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "DeskMotion"
-            packageVersion = "1.0.0"
+            packageVersion = Config.version
         }
     }
 }

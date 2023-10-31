@@ -5,20 +5,20 @@ plugins {
 }
 
 android {
-    namespace = "${Config.namespace}.sender"
+    namespace = Config.packageSender
     compileSdk = Config.Android.compileSdk
     defaultConfig {
-        applicationId = "${Config.namespace}.sender"
+        applicationId = Config.packageSender
         minSdk = Config.Android.minSdk
         targetSdk = Config.Android.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = Config.versionCode
+        versionName = Config.version
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = Versions.compose
     }
     packaging {
         resources {
