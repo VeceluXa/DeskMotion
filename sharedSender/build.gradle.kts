@@ -62,6 +62,12 @@ android {
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.compose
+    }
 }
 
 multiplatformResources {

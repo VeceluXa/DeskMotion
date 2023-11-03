@@ -1,6 +1,6 @@
 object Versions {
     const val compose = "1.5.3"
-    const val kotlin = "1.9.0"
+    const val kotlin = "1.9.10"
     const val kotlinPlugin = "1.8.21"
     const val androidPlugin = "8.1.1"
 
