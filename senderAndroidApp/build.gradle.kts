@@ -48,5 +48,7 @@ dependencies {
         implementation(foundation)
         implementation(material3)
     }
+
+    implementation(Dependencies.Koin.android)
     implementation("androidx.activity:activity-compose:1.7.1")
 }

@@ -34,6 +34,7 @@ data class DeskMotionThemeColors(
     val surfaceTint: Color,
     val outlineVariant: Color,
     val scrim: Color,
+    val shimmerGradient: GradientColor
 )
 
 @Stable

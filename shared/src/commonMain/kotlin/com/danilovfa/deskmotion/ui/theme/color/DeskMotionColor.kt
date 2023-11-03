@@ -43,6 +43,9 @@ internal object DeskMotionColor {
     internal val md_theme_light_surfaceTint = Color(0xFF146E00)
     internal val md_theme_light_outlineVariant = Color(0xFFC3C8BC)
     internal val md_theme_light_scrim = Color(0xFF000000)
+    internal val md_theme_light_shimmer_start = Color(0xFFF2F2F2)
+    internal val md_theme_light_shimmer_center = Color(0xFFF8F8F8)
+    internal val md_theme_light_shimmer_end = Color(0xFFEBEBEB)
 
     internal val md_theme_dark_primary = Color(0xFF63E145)
     internal val md_theme_dark_onPrimary = Color(0xFF063900)
@@ -74,6 +77,9 @@ internal object DeskMotionColor {
     internal val md_theme_dark_surfaceTint = Color(0xFF63E145)
     internal val md_theme_dark_outlineVariant = Color(0xFF43483F)
     internal val md_theme_dark_scrim = Color(0xFF000000)
+    internal val md_theme_dark_shimmer_start = Color(0xFF161616)
+    internal val md_theme_dark_shimmer_center = Color(0xFF2A2A2A)
+    internal val md_theme_dark_shimmer_end = Color(0xFF0C0C0C)
 }
 
 @Composable

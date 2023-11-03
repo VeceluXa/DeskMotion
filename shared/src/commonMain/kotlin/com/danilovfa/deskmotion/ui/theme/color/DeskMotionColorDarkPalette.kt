@@ -30,4 +30,9 @@ val DeskMotionColorDarkPalette: DeskMotionThemeColors = DeskMotionThemeColors(
     surfaceTint = DeskMotionColor.md_theme_dark_surfaceTint,
     outlineVariant = DeskMotionColor.md_theme_dark_outlineVariant,
     scrim = DeskMotionColor.md_theme_dark_scrim,
+    shimmerGradient = GradientColor(
+        colorStart = DeskMotionColor.md_theme_dark_shimmer_start,
+        colorCenter = DeskMotionColor.md_theme_dark_shimmer_center,
+        colorEnd = DeskMotionColor.md_theme_dark_shimmer_end
+    )
 )

@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("com.android.library")
     id("org.jetbrains.compose")
     id("dev.icerock.mobile.multiplatform-resources")
@@ -34,17 +35,18 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 with(compose) {
-                    implementation(ui)
-                    implementation(runtime)
-                    implementation(foundation)
-                    implementation(material3)
-                    implementation(uiTooling)
-                    implementation(preview)
+                    api(ui)
+                    api(runtime)
+                    api(foundation)
+                    api(material3)
+                    api(uiTooling)
+                    api(preview)
+                    api(materialIconsExtended)
                 }
 
                 with(Dependencies.Koin) {
-                    implementation(compose)
-                    implementation(core)
+                    api(compose)
+                    api(core)
                 }
 
                 with(Dependencies.MokoResources) {
@@ -52,7 +54,13 @@ kotlin {
                     implementation(resourcesCompose)
                 }
 
+                with(Dependencies.Decompose) {
+                    api(decompose)
+                    api(composeExtensions)
+                }
+
                 api(Dependencies.kermit)
+                api(Dependencies.kotlinxSerialization)
             }
         }
         val commonTest by getting

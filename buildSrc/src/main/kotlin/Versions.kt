@@ -6,9 +6,12 @@ object Versions {
 
     const val kermit = "2.0.2"
     const val mokoResources = "0.23.0"
+    const val decompose = "2.2.0-alpha03"
+    const val mviKotlin = "3.2.1"
+    const val kotlinxSerialization = "1.6.0"
 
     object Koin {
-        const val koin = "1.5.0"
+        const val koin = "3.5.0"
         const val compose = "1.1.0"
     }
 }

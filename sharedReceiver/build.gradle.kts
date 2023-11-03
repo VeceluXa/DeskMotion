@@ -1,6 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    kotlin("plugin.serialization")
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -21,23 +21,16 @@ kotlin {
             dependencies {
                 api(project(":shared"))
 
-                with(compose) {
-                    implementation(ui)
-                    implementation(runtime)
-                    implementation(foundation)
-                    implementation(material3)
-                    implementation(uiTooling)
-                    implementation(preview)
-                }
-
-                with(Dependencies.Koin) {
-                    implementation(compose)
-                    implementation(core)
-                }
-
                 with(Dependencies.MokoResources) {
                     implementation(resources)
                     implementation(resourcesCompose)
+                }
+
+                with(Dependencies.MviKotlin) {
+                    implementation(mviKotlin)
+                    implementation(main)
+                    implementation(logging)
+                    implementation(coroutinesExtensions)
                 }
             }
         }

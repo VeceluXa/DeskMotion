@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("com.android.library")
-    id("org.jetbrains.compose")
     id("dev.icerock.mobile.multiplatform-resources")
 }
 
@@ -22,18 +22,11 @@ kotlin {
             dependencies {
                 api(project(":shared"))
 
-                with(compose) {
-                    implementation(ui)
-                    implementation(runtime)
-                    implementation(foundation)
-                    implementation(material3)
-                    implementation(uiTooling)
-                    implementation(preview)
-                }
-
-                with(Dependencies.Koin) {
-                    implementation(compose)
-                    implementation(core)
+                with(Dependencies.MviKotlin) {
+                    implementation(mviKotlin)
+                    implementation(main)
+                    implementation(logging)
+                    implementation(coroutinesExtensions)
                 }
 
                 with(Dependencies.MokoResources) {
@@ -50,6 +43,9 @@ kotlin {
 
         val androidMain by getting {
             dependsOn(commonMain)
+            dependencies {
+                implementation(Dependencies.Koin.android)
+            }
         }
         val androidUnitTest by getting
         val androidInstrumentedTest by getting

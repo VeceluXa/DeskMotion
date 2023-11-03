@@ -20,7 +20,10 @@ fun DeskMotionTheme(
         if (useDarkTheme) DeskMotionColorDarkPalette else DeskMotionColorLightPalette
     }
 
-    MaterialTheme() {
+    MaterialTheme(
+        typography = MaterialTypography,
+        shapes = Shapes
+    ) {
         CompositionLocalProvider(
             LocalDeskMotionColors provides colorPalette,
             LocalTextStyle provides DeskMotionTypography.textBook18,
