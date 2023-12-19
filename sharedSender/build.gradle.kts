@@ -28,11 +28,6 @@ kotlin {
                     implementation(logging)
                     implementation(coroutinesExtensions)
                 }
-
-                with(Dependencies.MokoResources) {
-                    implementation(resources)
-                    implementation(resourcesCompose)
-                }
             }
         }
         val commonTest by getting {
@@ -66,11 +61,6 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.composeCompiler
     }
-}
-
-multiplatformResources {
-    multiplatformResourcesPackage = Config.packageSender
-    multiplatformResourcesClassName = "SenderRes"
 }

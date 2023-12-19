@@ -28,6 +28,19 @@ object Dependencies {
         const val coroutinesExtensions = "$nameSpace:mvikotlin-extensions-coroutines:${Versions.mviKotlin}"
     }
 
+    object SQLDelight {
+        private const val nameSpace = "app.cash.sqldelight"
+        const val runtime = "$nameSpace:runtime:${Versions.sqldelight}"
+        const val coroutinesExtensions = "$nameSpace:coroutines-extensions:${Versions.sqldelight}"
+        const val primitiveAdapters = "$nameSpace:primitive-adapters:${Versions.sqldelight}"
+        const val jvmDriver = "$nameSpace:sqlite-driver:${Versions.sqldelight}"
+        const val androidDriver = "$nameSpace:android-driver:${Versions.sqldelight}"
+    }
+
     const val kotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
+    const val kotlinxDateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDateTime}"
     const val kermit = "co.touchlab:kermit:${Versions.kermit}"
+    const val ktor = "io.ktor:ktor-network:${Versions.ktor}"
+    const val aayChart = "io.github.thechance101:chart:${Versions.aayChart}"
+    const val apacheCommons = "org.apache.commons:commons-lang3:${Versions.apacheCommons}"
 }

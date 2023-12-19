@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm").version(Versions.kotlin).apply(false)
     id("org.jetbrains.compose").version(Versions.compose).apply(false)
     id("dev.icerock.mobile.multiplatform-resources").version(Versions.mokoResources).apply(false)
+    id("app.cash.sqldelight").version(Versions.sqldelight).apply(false)
 }
 
 tasks.register("clean", Delete::class) {

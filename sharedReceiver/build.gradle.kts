@@ -1,7 +1,9 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.compose")
     id("dev.icerock.mobile.multiplatform-resources")
+    id("app.cash.sqldelight")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -21,9 +23,15 @@ kotlin {
             dependencies {
                 api(project(":shared"))
 
-                with(Dependencies.MokoResources) {
-                    implementation(resources)
-                    implementation(resourcesCompose)
+                with(compose) {
+                    implementation(ui)
+                    implementation(runtime)
+                    implementation(foundation)
+                    implementation(material)
+                    implementation(material3)
+                    implementation(uiTooling)
+                    implementation(preview)
+                    implementation(materialIconsExtended)
                 }
 
                 with(Dependencies.MviKotlin) {
@@ -32,6 +40,14 @@ kotlin {
                     implementation(logging)
                     implementation(coroutinesExtensions)
                 }
+
+                with(Dependencies.SQLDelight) {
+                    implementation(runtime)
+                    implementation(coroutinesExtensions)
+                    implementation(primitiveAdapters)
+                }
+
+                implementation(Dependencies.aayChart)
             }
         }
         val commonTest by getting {
@@ -42,12 +58,19 @@ kotlin {
 
         val desktopMain by getting {
             dependsOn(commonMain)
+            dependencies {
+                implementation(Dependencies.SQLDelight.jvmDriver)
+                implementation(Dependencies.apacheCommons)
+            }
         }
         val desktopTest by getting
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = Config.packageReceiver
-    multiplatformResourcesClassName = "ReceiverRes"
+sqldelight {
+    databases {
+        create("DeskMotionDatabase") {
+            packageName.set("com.danilovfa.deskmotion.receiver.deskMotionDatabase")
+        }
+    }
 }

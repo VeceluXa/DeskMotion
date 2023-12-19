@@ -38,6 +38,7 @@ kotlin {
                     api(ui)
                     api(runtime)
                     api(foundation)
+                    api(material)
                     api(material3)
                     api(uiTooling)
                     api(preview)
@@ -50,8 +51,8 @@ kotlin {
                 }
 
                 with(Dependencies.MokoResources) {
-                    implementation(resources)
-                    implementation(resourcesCompose)
+                    api(resources)
+                    api(resourcesCompose)
                 }
 
                 with(Dependencies.Decompose) {
@@ -59,8 +60,17 @@ kotlin {
                     api(composeExtensions)
                 }
 
+                with(Dependencies.MviKotlin) {
+                    api(mviKotlin)
+                    api(main)
+                    api(logging)
+                    api(coroutinesExtensions)
+                }
+
                 api(Dependencies.kermit)
                 api(Dependencies.kotlinxSerialization)
+                api(Dependencies.kotlinxDateTime)
+                implementation(Dependencies.ktor)
             }
         }
         val commonTest by getting
@@ -93,9 +103,8 @@ android {
 
 multiplatformResources {
     multiplatformResourcesPackage = Config.namespace
-    multiplatformResourcesClassName = "SharedRes"
 }
 
-task("testClasses").doLast {
-    println("This is a workaround to skip testClasses gradle task")
-}
+//task("testClasses").doLast {
+//    println("This is a workaround to skip testClasses gradle task")
+//}
