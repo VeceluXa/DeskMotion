@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeskMotion</string>
+    <string name="start_game">Start Game!</string>
+    <string name="start">Start</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="ip">IP</string>
+    <string name="port">Port</string>
+    <string name="feature_stub_title">Not supported yet!</string>
+    <string name="feature_stub_description">This feature will be added in next version of the app.</string>
+    <string name="scroll_bottom">Scroll to the bottom</string>
+    <string name="game_close_warning">Do you really want to stop connection? The receiver will not receive any data.</string>
+    <string name="game">Game</string>
+    <string name="history">History</string>
+    <string name="your_ip_address">Your IP Address: %s</string>
+    <string name="levels">Levels</string>
+    <string name="select_level">Select level</string>
+    <string name="connection">Connection</string>
+    <string name="game_score">Score: %s</string>
+    <string name="victory">Victory</string>
+    <string name="total_score">Total score: %s</string>
+    <string name="details">Details</string>
+    <string name="show_path_details">Show path details</string>
+    <string name="path_details">Path Details</string>
+    <string name="history_empty_stub_title">Logs are empty</string>
+    <string name="history_empty_stub_description">No plays were recorded. Play a match to see details here.</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+</resources>

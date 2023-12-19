@@ -16,7 +16,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -34,11 +33,13 @@ import com.danilovfa.deskmotion.ui.modifier.consumeTouches
 import com.danilovfa.deskmotion.ui.modifier.rememberMinSize
 import com.danilovfa.deskmotion.ui.theme.DeskMotionTheme
 import com.danilovfa.deskmotion.ui.theme.DeskMotionTypography
+import com.danilovfa.deskmotion.ui.theme.micro
 import com.danilovfa.deskmotion.ui.theme.tiny
 import com.danilovfa.deskmotion.ui.view.HSpacer
+import com.danilovfa.deskmotion.ui.view.text.Text
 
 @Composable
-fun PrimaryButtonLarge(
+fun Button(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,14 +54,12 @@ fun PrimaryButtonLarge(
     Button(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = largeButtonHeight)
             .consumeTouches(loading, onClick)
             .rememberMinSize { _, _ -> !loading }
             .indication(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
-                    color = DeskMotionTheme.colors.buttonPrimaryRipple,
+                    color = DeskMotionTheme.colors.inversePrimary,
                     radius = 10.dp
                 )
             ),
@@ -85,11 +84,11 @@ fun PrimaryButtonLarge(
                     )
                     HSpacer(8.dp)
                 }
-                com.licard.b2b.ui.view.text.Text(
+                Text(
                     text = text,
                     maxLines = maxLines,
                     textAlign = TextAlign.Center,
-                    style = LicardTypography.textMedium18,
+                    style = DeskMotionTypography.textMedium18,
                 )
             }
         }
@@ -97,12 +96,71 @@ fun PrimaryButtonLarge(
 }
 
 @Composable
-fun OutlineButtonLarge(
+fun PrimaryButtonLarge(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: ButtonColors = LicardButtonColors.outlineButtonColors(),
+    colors: ButtonColors = DeskMotionButtonColors.primaryButtonColors(),
+    maxLines: Int = 1,
+    shape: Shape = MaterialTheme.shapes.tiny,
+    contentPadding: PaddingValues = largeButtonContentPadding,
+    loading: Boolean = false,
+    icon: Painter? = null,
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = largeButtonHeight)
+            .consumeTouches(loading, onClick)
+            .rememberMinSize { _, _ -> !loading }
+            .indication(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    color = DeskMotionTheme.colors.inversePrimary,
+                    radius = 10.dp
+                )
+            ),
+        enabled = enabled,
+        elevation = null,
+        shape = shape,
+        colors = colors,
+        contentPadding = contentPadding,
+    ) {
+        if (loading) {
+            CircularProgressIndicator(
+                color = colors.contentColor(enabled).value,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (icon != null) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = null,
+                    )
+                    HSpacer(8.dp)
+                }
+                Text(
+                    text = text,
+                    maxLines = maxLines,
+                    textAlign = TextAlign.Center,
+                    style = DeskMotionTypography.textMedium18,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun OutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: ButtonColors = DeskMotionButtonColors.outlineButtonColors(),
     maxLines: Int = 1,
     shape: Shape = MaterialTheme.shapes.tiny,
     contentPadding: PaddingValues = LargeButtonContentPadding,
@@ -112,9 +170,7 @@ fun OutlineButtonLarge(
     OutlinedButton(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = LargeButtonHeight)
-            .consumeTouches(loading)
+            .consumeTouches(loading) {}
             .rememberMinSize { _, _ -> !loading },
         enabled = enabled,
         elevation = null,
@@ -139,11 +195,65 @@ fun OutlineButtonLarge(
                     )
                     HSpacer(8.dp)
                 }
-                com.licard.b2b.ui.view.text.Text(
+                Text(
                     text = text,
                     maxLines = maxLines,
                     textAlign = TextAlign.Center,
-                    style = LicardTypography.textMedium18,
+                    style = DeskMotionTypography.textMedium18,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun OutlineButtonLarge(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: ButtonColors = DeskMotionButtonColors.outlineButtonColors(),
+    maxLines: Int = 1,
+    shape: Shape = MaterialTheme.shapes.tiny,
+    contentPadding: PaddingValues = LargeButtonContentPadding,
+    loading: Boolean = false,
+    icon: Painter? = null,
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = LargeButtonHeight)
+            .consumeTouches(loading) {}
+            .rememberMinSize { _, _ -> !loading },
+        enabled = enabled,
+        elevation = null,
+        shape = shape,
+        colors = colors,
+        border = BorderStroke(width = 1.dp, color = colors.contentColor(enabled).value),
+        contentPadding = contentPadding,
+    ) {
+        if (loading) {
+            CircularProgressIndicator(
+                color = colors.contentColor(enabled).value,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (icon != null) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = null,
+                        tint = colors.contentColor(enabled).value
+                    )
+                    HSpacer(8.dp)
+                }
+                Text(
+                    text = text,
+                    maxLines = maxLines,
+                    textAlign = TextAlign.Center,
+                    style = DeskMotionTypography.textMedium18,
                 )
             }
         }
@@ -163,7 +273,7 @@ fun FloatTextButton(
         modifier = modifier.padding(paddingValues),
         text = text,
         onClick = onClick,
-        colors = LicardButtonColors.primaryButtonColors(),
+        colors = DeskMotionButtonColors.primaryButtonColors(),
         icon = icon,
         iconModifier = Modifier.size(24.dp),
         iconHorizontalSpace = 10.dp,
@@ -182,7 +292,7 @@ fun TextButton(
     enabled: Boolean = true,
     colors: ButtonColors = DeskMotionButtonColors.textButtonColors(),
     shape: Shape = MaterialTheme.shapes.micro,
-    contentPadding: PaddingValues = androidx.compose.material.ButtonDefaults.TextButtonContentPadding,
+    contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
     textStyle: TextStyle = DeskMotionTypography.textMedium18,
     loading: Boolean = false,
     icon: Painter? = null,
@@ -216,7 +326,7 @@ fun TextButton(
                     )
                     HSpacer(iconHorizontalSpace)
                 }
-                com.licard.b2b.ui.view.text.Text(
+                Text(
                     text = text,
                     textAlign = TextAlign.Center,
                     style = textStyle,
@@ -232,30 +342,29 @@ private val largeButtonContentPadding = PaddingValues(16.dp)
 object DeskMotionButtonColors {
     @Composable
     fun primaryButtonColors() = ButtonDefaults.buttonColors(
-        containerColor = DeskMotionTheme.colors.primary,
+        backgroundColor = DeskMotionTheme.colors.primary,
         contentColor = DeskMotionTheme.colors.onPrimary,
-        disabledContainerColor = DeskMotionTheme.colors.secondary,
+        disabledBackgroundColor = DeskMotionTheme.colors.secondary,
         disabledContentColor = DeskMotionTheme.colors.onSecondary,
     )
 
     @Composable
-    fun test() {
-        DeskMotionButtonColors.primaryButtonColors().
-    }
-
-    @Composable
     fun outlineButtonColors() = ButtonDefaults.buttonColors(
-        containerColor = Color.Transparent,
+        backgroundColor = Color.Transparent,
         contentColor = DeskMotionTheme.colors.primary,
-        disabledContainerColor = Color.Transparent,
+        disabledBackgroundColor = Color.Transparent,
         disabledContentColor = DeskMotionTheme.colors.secondary
     )
 
     @Composable
     fun textButtonColors() = ButtonDefaults.buttonColors(
-        containerColor = Color.Transparent,
+        backgroundColor = Color.Transparent,
         contentColor = DeskMotionTheme.colors.primary,
-        disabledContainerColor = Color.Transparent,
+        disabledBackgroundColor = Color.Transparent,
         disabledContentColor = DeskMotionTheme.colors.secondary
     )
 }
+
+private val LargeButtonHeight = 56.dp
+private val LargeButtonContentPadding: PaddingValues =
+    PaddingValues(vertical = 16.dp, horizontal = 16.dp)

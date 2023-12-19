@@ -49,6 +49,11 @@ object DeskMotionTypography {
         fontSize = 24.sp,
         lineHeight = 30.sp,
     )
+    val textMedium24 = defaultStyle.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 30.sp
+    )
     val textBook14 = defaultStyle.copy(
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,

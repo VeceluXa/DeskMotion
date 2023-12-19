@@ -34,5 +34,6 @@ val DeskMotionColorLightPalette: DeskMotionThemeColors = DeskMotionThemeColors(
         colorStart = DeskMotionColor.md_theme_light_shimmer_start,
         colorCenter = DeskMotionColor.md_theme_light_shimmer_center,
         colorEnd = DeskMotionColor.md_theme_light_shimmer_end
-    )
+    ),
+    asterisk = DeskMotionColor.md_theme_light_asterisk
 )
