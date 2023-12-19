@@ -1,0 +1,30 @@
+import com.danilovfa.deskmotion.receiver.domain.model.Coordinate;
+import kotlin.collections.List;
+
+CREATE TABLE playLogEntity(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    levelId INTEGER NOT NULL,
+    log TEXT AS List<Coordinate> NOT NULL,
+    score INTEGER NOT NULL,
+    completedEpochMillis INTEGER NOT NULL
+);
+
+insertPlayLog:
+INSERT OR REPLACE
+INTO playLogEntity(
+    id,
+    levelId,
+    log,
+    score,
+    completedEpochMillis
+) VALUES (?, ?, ?, ?, ?);
+
+deletePlayLog:
+DELETE FROM playLogEntity
+WHERE id = :id;
+
+getPlayLogs:
+SELECT * FROM playLogEntity ORDER BY completedEpochMillis DESC;
+
+getPlayLogById:
+SELECT * FROM playLogEntity WHERE id = :id;

@@ -1,0 +1,29 @@
+import com.danilovfa.deskmotion.receiver.domain.model.Coordinate;
+import kotlin.Boolean;
+import kotlin.collections.List;
+
+CREATE TABLE levelEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    targets TEXT AS List<Coordinate> NOT NULL,
+    isCompleted INTEGER AS Boolean DEFAULT 0 NOT NULL
+);
+
+insertLevel:
+INSERT OR REPLACE
+INTO levelEntity(
+    id,
+    name,
+    targets,
+    isCompleted
+) VALUES (?, ?, ?, ?);
+
+deleteLevel:
+DELETE FROM levelEntity
+WHERE id = :id;
+
+getLevels:
+SELECT * FROM levelEntity;
+
+getLevelById:
+SELECT * FROM levelEntity WHERE id = :id;
