@@ -67,9 +67,16 @@ kotlin {
                     api(coroutinesExtensions)
                 }
 
+                with(Dependencies.Preferences) {
+                    api(core)
+                    api(noArgs)
+                    api(coroutines)
+                }
+
                 api(Dependencies.kermit)
                 api(Dependencies.kotlinxSerialization)
                 api(Dependencies.kotlinxDateTime)
+                api(Dependencies.dataStore)
                 implementation(Dependencies.ktor)
             }
         }
@@ -83,6 +90,9 @@ kotlin {
 
         val desktopMain by getting {
             dependsOn(commonMain)
+            dependencies {
+                api(Dependencies.apacheCommons)
+            }
         }
         val desktopTest by getting
     }

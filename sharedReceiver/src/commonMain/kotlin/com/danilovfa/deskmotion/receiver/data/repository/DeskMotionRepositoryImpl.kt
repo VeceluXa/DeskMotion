@@ -49,11 +49,11 @@ class DeskMotionRepositoryImpl(
 
     override suspend fun addLog(log: PlayLog) = withContext(ioDispatcher) {
         playLogQueries.insertPlayLog(
-            log.id,
-            log.levelId,
-            log.log,
-            log.score.toLong(),
-            log.completedEpochMillis
+            id = log.id,
+            levelId = log.levelId,
+            log = log.log,
+            score = log.score.toLong(),
+            completedEpochMillis = log.completedEpochMillis
         )
     }
 

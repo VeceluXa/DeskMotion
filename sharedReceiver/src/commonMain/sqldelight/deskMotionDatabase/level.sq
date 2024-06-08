@@ -27,3 +27,8 @@ SELECT * FROM levelEntity;
 
 getLevelById:
 SELECT * FROM levelEntity WHERE id = :id;
+
+markCompleted:
+UPDATE levelEntity
+    SET isCompleted = 1
+    WHERE id = :id;

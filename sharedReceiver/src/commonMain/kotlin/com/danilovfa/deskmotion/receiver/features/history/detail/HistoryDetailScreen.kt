@@ -115,6 +115,8 @@ private fun HistoryDetails(
             DetailsItem(formattedDateTime(playLog.completedEpochMillis))
             VSpacer(DeskMotionDimension.layoutMainMargin)
             DetailsItem(stringResource(MR.strings.total_score, playLog.score.toString()))
+            VSpacer(DeskMotionDimension.layoutMainMargin)
+//            DetailsItem("${playLog.firstName} ${playLog.lastName} ${playLog.middleName}")
         }
 
         VSpacer(DeskMotionDimension.layoutLargeMargin)

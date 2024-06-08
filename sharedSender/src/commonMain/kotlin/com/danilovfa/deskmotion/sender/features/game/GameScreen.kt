@@ -117,7 +117,10 @@ private fun LogLayout(
             state = listState,
             modifier = Modifier.fillMaxSize()
         ) {
-            items(state.logs.size) { position ->
+            items(
+                count = state.logs.size,
+                key = { state.logs[it].epochMillis }
+            ) { position ->
                 val index = state.logs.size - position
                 LogItem(index, state.logs[position])
             }

@@ -4,10 +4,16 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_IP_KEY
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_PORT_KEY
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
+import com.russhwolf.settings.set
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.component.KoinComponent
 
 class WifiStoreFactory(private val storeFactory: StoreFactory) : KoinComponent {
+    val settings = Settings()
 
     fun create(): WifiStore = object : WifiStore,
         Store<WifiStore.Intent, WifiStore.State, WifiStore.Label> by storeFactory.create(
@@ -35,6 +41,8 @@ class WifiStoreFactory(private val storeFactory: StoreFactory) : KoinComponent {
             }
 
         fun onStartClicked(state: WifiStore.State) {
+            settings[SETTINGS_IP_KEY] = state.ip
+            settings[SETTINGS_PORT_KEY] = state.port
             publish(WifiStore.Label.StartGame(state.ip, state.port.toInt()))
         }
     }

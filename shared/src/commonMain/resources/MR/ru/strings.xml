@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeskMotion</string>
+    <string name="start_game">Начать Игру!</string>
+    <string name="start">Старт</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="ip">IP</string>
+    <string name="port">Port</string>
+    <string name="feature_stub_title">Ещё не реализовано!</string>
+    <string name="feature_stub_description">Эта функция будет добавлена в следующей версии приложения.</string>
+    <string name="scroll_bottom">Переместиться вниз</string>
+    <string name="game_close_warning">Вы действительно хотите прервать соединение? Получатель перестанет получать новые данные.</string>
+    <string name="game">Игра</string>
+    <string name="history">История</string>
+    <string name="your_ip_address">Ваш IP адрес: %s</string>
+    <string name="levels">Уровни</string>
+    <string name="select_level">Выбрать уровень</string>
+    <string name="connection">Соединение</string>
+    <string name="game_score">Счёт: %s</string>
+    <string name="victory">Победа</string>
+    <string name="total_score">Счёт: %s</string>
+    <string name="details">Подробности</string>
+    <string name="show_path_details">Показать подробности пути</string>
+    <string name="path_details">Подробности Пути</string>
+    <string name="history_empty_stub_title">История пуста</string>
+    <string name="history_empty_stub_description">Ни одной игры не было записано. Сыграйте матч, чтобы увидеть историю здесь.</string>
+    <string name="level">Уровень %s</string>
+
+    <!--  Settings section  -->
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="save">Сохранить</string>
+    <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="middle_name">Отчество</string>
+    <!-- End of section -->
+
+    <!--  General section  -->
+    <string name="ok">ОК</string>
+    <string name="cancel">Отменить</string>
+    <string name="close">Закрыть</string>
+    <string name="error">Ошибка</string>
+    <string name="warning">Внимание</string>
+    <string name="next">Далее</string>
+    <!--  End of section  -->
+</resources>

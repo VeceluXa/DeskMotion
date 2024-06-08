@@ -16,6 +16,8 @@ import com.danilovfa.deskmotion.receiver.features.game.configuration.wifi.Defaul
 import com.danilovfa.deskmotion.receiver.features.game.configuration.wifi.WifiComponent
 import com.danilovfa.deskmotion.receiver.domain.model.Level
 import com.danilovfa.deskmotion.receiver.domain.model.PlayLog
+import com.danilovfa.deskmotion.receiver.features.game.configuration.user.DefaultUserConfigComponent
+import com.danilovfa.deskmotion.receiver.features.game.configuration.user.UserConfigComponent
 import com.danilovfa.deskmotion.receiver.features.game.finish.DefaultGameFinishComponent
 import com.danilovfa.deskmotion.receiver.features.game.finish.GameFinishComponent
 import com.danilovfa.deskmotion.receiver.features.game.game.DefaultGameComponent
@@ -24,6 +26,14 @@ import com.danilovfa.deskmotion.receiver.features.game.levels.DefaultLevelsCompo
 import com.danilovfa.deskmotion.receiver.features.game.levels.LevelsComponent
 import com.danilovfa.deskmotion.receiver.features.game.select_connection.DefaultSelectConnectionComponent
 import com.danilovfa.deskmotion.receiver.features.game.select_connection.GameSelectConnectionComponent
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_FIRST_NAME
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_IP_KEY
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_LAST_NAME
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_PORT_KEY
+import com.danilovfa.deskmotion.utils.validators.isIpValid
+import com.danilovfa.deskmotion.utils.validators.isPortValid
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import kotlinx.serialization.Serializable
 
 class DefaultGameRootComponent(
@@ -31,6 +41,7 @@ class DefaultGameRootComponent(
     private val storeFactory: StoreFactory
 ) : GameRootComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
+    private val settings = Settings()
 
     private val stack =
         childStack(
@@ -93,6 +104,15 @@ class DefaultGameRootComponent(
                 output = ::onGameFinishOutput
             )
         )
+
+        is Config.UserConfig -> GameRootComponent.Child.User(
+            DefaultUserConfigComponent(
+                storeFactory = storeFactory,
+                componentContext = componentContext,
+                level = config.level,
+                output = ::onUserOutput
+            )
+        )
     }
 
     private fun onGameFinishOutput(output: GameFinishComponent.Output) {
@@ -104,9 +124,49 @@ class DefaultGameRootComponent(
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
+    private fun onUserOutput(output: UserConfigComponent.Output) = when (output) {
+        UserConfigComponent.Output.NavigateBack -> navigation.pop()
+        is UserConfigComponent.Output.NavigateNext -> {
+            val ip = settings[SETTINGS_IP_KEY] ?: ""
+            val port = settings[SETTINGS_PORT_KEY] ?: ""
+
+            if (isIpValid(ip) && isPortValid(port)) {
+                navigation.pushNew(Config.Game(
+                    level = output.level,
+                    connectionData = ConnectionData.Wifi(
+                        ip = ip,
+                        port = port.toInt()
+                    )
+                ))
+            } else {
+                navigation.pushNew(Config.SelectConnection(output.level))
+            }
+        }
+    }
+
+    @OptIn(ExperimentalDecomposeApi::class)
     private fun onLevelsOutput(output: LevelsComponent.Output) {
         when (output) {
-            is LevelsComponent.Output.LevelSelected -> navigation.pushNew(Config.SelectConnection(output.level))
+            is LevelsComponent.Output.LevelSelected -> {
+                val firstName = settings[SETTINGS_FIRST_NAME] ?: ""
+                val lastName = settings[SETTINGS_LAST_NAME] ?: ""
+                val ip = settings[SETTINGS_IP_KEY] ?: ""
+                val port = settings[SETTINGS_PORT_KEY] ?: ""
+
+                if (firstName == "" || lastName == "") {
+                    navigation.pushNew(Config.UserConfig(output.level))
+                } else if (isIpValid(ip) && isPortValid(port)) {
+                    navigation.pushNew(Config.Game(
+                        level = output.level,
+                        connectionData = ConnectionData.Wifi(
+                            ip = ip,
+                            port = port.toInt()
+                        )
+                    ))
+                } else {
+                    navigation.pushNew(Config.SelectConnection(output.level))
+                }
+            }
         }
     }
 
@@ -145,6 +205,8 @@ class DefaultGameRootComponent(
 
     @Serializable
     sealed interface Config {
+        @Serializable
+        data class UserConfig(val level: Level) : Config
 
         @Serializable
         data object Bluetooth : Config

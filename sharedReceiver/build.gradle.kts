@@ -60,7 +60,6 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(Dependencies.SQLDelight.jvmDriver)
-                implementation(Dependencies.apacheCommons)
             }
         }
         val desktopTest by getting

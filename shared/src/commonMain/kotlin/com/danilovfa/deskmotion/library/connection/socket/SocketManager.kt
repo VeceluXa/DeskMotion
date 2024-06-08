@@ -25,7 +25,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class SocketManager(
-    val isServer: Boolean = false
+    private val isServer: Boolean = false
 ): DataServer {
     private val selectorManager = SelectorManager(Dispatchers.IO)
     private var socket: Socket? = null
@@ -34,7 +34,6 @@ class SocketManager(
     private var readChannel: ByteReadChannel? = null
 
     suspend fun connect(ip: String, port: Int) {
-        Logger.i { "Try to connect" }
         socket = if (isServer) {
             aSocket(selectorManager)
                 .tcp()
@@ -45,8 +44,6 @@ class SocketManager(
                 .tcp()
                 .connect(ip, port)
         }
-
-        Logger.i { "Connected" }
     }
 
     override suspend fun sendData(data: TransferEvent) {
@@ -63,7 +60,6 @@ class SocketManager(
     }
 
     override fun receiveData(): Flow<TransferEvent> {
-        Logger.i { "Try to create a Read Channel" }
         if (readChannel == null) {
             readChannel = socket?.openReadChannel()
         }
@@ -74,13 +70,13 @@ class SocketManager(
             }
 
             while(true) {
-                readChannel?.consumeEachBufferRange { buffer, last ->
+                readChannel?.consumeEachBufferRange { buffer, _ ->
                     val line = buffer.moveToByteArray().decodeToString()
                     try {
                         val decodedData = Json.decodeFromString(TransferEvent.serializer(), line)
                         emit(decodedData)
                     } catch (e: Exception) {
-//                        Logger.e(TAG, e)
+                        Logger.e(TAG, e)
                     }
 
                     true

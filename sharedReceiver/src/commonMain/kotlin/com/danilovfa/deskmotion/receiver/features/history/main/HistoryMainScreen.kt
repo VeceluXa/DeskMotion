@@ -77,6 +77,7 @@ private fun HistoryMainLayout(
         items(state.logs) { log ->
             LogItem(
                 log = log,
+                isTheOnlyChild = state.isTheOnlyChild,
                 onClick = { component.onEvent(HistoryMainStore.Intent.OnPlayLogClicked(log)) }
             )
         }
@@ -103,8 +104,23 @@ private fun HistoryMainLayout(
 @Composable
 private fun LogItem(
     log: PlayLog,
+    isTheOnlyChild: Boolean,
     onClick: () -> Unit
 ) {
+    val time = formattedDateTime(log.completedEpochMillis)
+    val firstText = if (isTheOnlyChild) {
+        time
+    } else {
+        ""
+//        "${log.firstName} ${log.lastName} ${log.middleName}"
+    }
+
+    val secondText = if (isTheOnlyChild) {
+        stringResource(MR.strings.game_score, log.score.toString())
+    } else {
+        time
+    }
+
     Row(
         modifier = Modifier
             .padding(DeskMotionDimension.layoutMediumMargin)
@@ -121,7 +137,7 @@ private fun LogItem(
             )
     ) {
         Text(
-            text = formattedDateTime(log.completedEpochMillis),
+            text = firstText,
             color = DeskMotionTheme.colors.onSurfaceVariant,
             style = DeskMotionTypography.textBook24
         )
@@ -129,7 +145,7 @@ private fun LogItem(
         WSpacer()
 
         Text(
-            text = stringResource(MR.strings.game_score, log.score.toString()),
+            text = secondText,
             color = DeskMotionTheme.colors.onSurfaceVariant,
             style = DeskMotionTypography.textBook24
         )

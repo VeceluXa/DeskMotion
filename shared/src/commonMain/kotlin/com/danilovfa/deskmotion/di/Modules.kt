@@ -1,3 +1,3 @@
 package com.danilovfa.deskmotion.di
 
-val sharedModules = listOf(sharedModule)
+val sharedModules = listOf(sharedModule, nativeModule)

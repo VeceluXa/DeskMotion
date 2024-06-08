@@ -9,15 +9,46 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.danilovfa.deskmotion.receiver.features.game.root.DefaultGameRootComponent
 import com.danilovfa.deskmotion.receiver.features.history.root.DefaultHistoryRootComponent
+import com.danilovfa.deskmotion.receiver.features.settings.root.DefaultSettingsRootComponent
+import com.danilovfa.deskmotion.receiver.features.settings.root.SettingsRootComponent
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_LANGUAGE_KEY
+import com.danilovfa.deskmotion.ui.decompose.coroutineScope
+import com.danilovfa.deskmotion.receiver.utils.locale.DeskMotionLocale
+import com.danilovfa.deskmotion.receiver.utils.locale.setLocale
+import com.russhwolf.settings.Settings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
 
 class DefaultRootComponent(
     private val componentContext: ComponentContext,
-    private val storeFactory: StoreFactory
-) : RootComponent, ComponentContext by componentContext {
+    private val storeFactory: StoreFactory,
+    private val output: (RootComponent.Output) -> Unit
+) : RootComponent, ComponentContext by componentContext, KoinComponent {
+    private val scope = coroutineScope(Dispatchers.Main + SupervisorJob())
+
+    private val settings = Settings()
+
+    init {
+        val locale = when(settings.getString(SETTINGS_LANGUAGE_KEY, DeskMotionLocale.ENGLISH.code)) {
+            DeskMotionLocale.ENGLISH.code -> DeskMotionLocale.ENGLISH
+            else -> DeskMotionLocale.RUSSIAN
+        }
+        setLocale(locale)
+
+//        preferencesDataStore.data
+//            .onEach { preferences ->
+//                if (preferences.locale.isCurrent().not()) {
+//                    setLocale(preferences.locale)
+//                }
+//            }
+//            .launchIn(scope)
+    }
+
     private val navigation = StackNavigation<Config>()
     private val stack =
         childStack(
@@ -45,6 +76,14 @@ class DefaultRootComponent(
                 storeFactory
             )
         )
+
+        Config.Settings -> RootComponent.Child.Settings(
+            DefaultSettingsRootComponent(
+                componentContext,
+                storeFactory,
+                ::onSettingsOutput
+            )
+        )
     }
 
     override fun onNavigationItemClick(navigationItem: NavigationItemData) {
@@ -62,6 +101,12 @@ class DefaultRootComponent(
         navigation.bringToFront(config)
     }
 
+    private fun onSettingsOutput(output: SettingsRootComponent.Output) {
+        when (output) {
+            SettingsRootComponent.Output.Restart -> output(RootComponent.Output.Restart)
+        }
+    }
+
     @Serializable
     sealed interface Config {
 
@@ -70,5 +115,8 @@ class DefaultRootComponent(
 
         @Serializable
         data object History : Config
+
+        @Serializable
+        data object Settings : Config
     }
 }

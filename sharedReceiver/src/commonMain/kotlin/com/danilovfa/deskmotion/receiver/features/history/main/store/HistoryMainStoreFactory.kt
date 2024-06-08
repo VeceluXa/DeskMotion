@@ -41,6 +41,7 @@ class HistoryMainStoreFactory(
         data object HideError : Msg()
         data object ShowLoading : Msg()
         data object HideLoading : Msg()
+        data class UpdateIsTheOnlyChild(val isTheOnlyChild: Boolean) : Msg()
     }
 
     private inner class ExecutorImpl :
@@ -78,9 +79,30 @@ class HistoryMainStoreFactory(
                 .onEachContent { playLogs ->
                     dispatch(Msg.HideLoading)
                     dispatch(Msg.ShowLogs(playLogs))
+                    checkIfTheOnlyChild(playLogs)
                 }
                 .onEachError { dispatch(Msg.ShowError(it.message ?: "")) }
                 .launchIn(scope)
+        }
+
+        private fun checkIfTheOnlyChild(playLogs: List<PlayLog>) {
+            if (playLogs.isEmpty()) return
+            var isTheOnlyChild = true
+
+            val iterator = playLogs.iterator()
+            var prevItem = iterator.next()
+            while (iterator.hasNext() && isTheOnlyChild) {
+                val currItem = iterator.next()
+//                if (prevItem.firstName != currItem.firstName ||
+//                    prevItem.lastName != currItem.lastName ||
+//                    prevItem.middleName != currItem.middleName) {
+//                    isTheOnlyChild = false
+//                }
+
+                prevItem = currItem
+            }
+
+            dispatch(Msg.UpdateIsTheOnlyChild(isTheOnlyChild))
         }
 
         private fun dismissErrorDialog() {
@@ -96,6 +118,7 @@ class HistoryMainStoreFactory(
             Msg.HideError -> copy(isError = false, errorMessage = "")
             Msg.HideLoading -> copy(isLoading = false)
             Msg.ShowLoading -> copy(isLoading = true)
+            is Msg.UpdateIsTheOnlyChild -> copy(isTheOnlyChild = msg.isTheOnlyChild)
         }
     }
 

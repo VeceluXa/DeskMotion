@@ -27,4 +27,7 @@ getPlayLogs:
 SELECT * FROM playLogEntity ORDER BY completedEpochMillis DESC;
 
 getPlayLogById:
-SELECT * FROM playLogEntity WHERE id = :id;
+SELECT * FROM playLogEntity WHERE id = :id LIMIT 1;
+
+clearPlayLogs:
+DELETE FROM playLogEntity;

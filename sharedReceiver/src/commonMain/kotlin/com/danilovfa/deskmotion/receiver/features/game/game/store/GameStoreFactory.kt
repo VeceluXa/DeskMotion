@@ -17,10 +17,18 @@ import com.danilovfa.deskmotion.receiver.domain.repository.DeskMotionRepository
 import com.danilovfa.deskmotion.receiver.utils.Constants.GAME_DELAY
 import com.danilovfa.deskmotion.receiver.utils.Constants.GAME_SCREEN_HEIGHT
 import com.danilovfa.deskmotion.receiver.utils.Constants.GAME_SCREEN_WIDTH
+import com.danilovfa.deskmotion.receiver.utils.Constants.MAX_LOG_SIZE
 import com.danilovfa.deskmotion.receiver.utils.Constants.SCORE_INCREMENT
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_FIRST_NAME
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_LAST_NAME
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_MIDDLE_NAME
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_USER_ID
 import com.danilovfa.deskmotion.receiver.utils.Constants.SPEED_MULTIPLIER
 import com.danilovfa.deskmotion.receiver.utils.Constants.TARGET_SCORE_BOUND
+import com.danilovfa.deskmotion.utils.list.compress
 import com.danilovfa.deskmotion.utils.time.currentTime
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,6 +91,8 @@ class GameStoreFactory(
             Dispatchers.Main
         ) {
 
+            private val settings = Settings()
+
         private var readDataJob: Job? = null
         private var lastReceivedEvent: TransferEvent? = null
 
@@ -128,7 +138,6 @@ class GameStoreFactory(
         private fun observeReceivedData() {
             dataServer?.let { dataServer ->
                 readDataJob = dataServer.receiveData().onEach {
-//                    Logger.d(DataServer.TAG) { it.toString() }
                     lastReceivedEvent = it
                     dispatch(Msg.AddEvent(it))
                 }.launchIn(scope)
@@ -171,10 +180,11 @@ class GameStoreFactory(
             readDataJob?.cancel()
 
             val playLog = PlayLog(
+                id = 0L,
                 levelId = level.id,
                 log = log,
                 score = score,
-                completedEpochMillis = currentTime()
+                completedEpochMillis = currentTime(),
             )
 
             scope.launch {

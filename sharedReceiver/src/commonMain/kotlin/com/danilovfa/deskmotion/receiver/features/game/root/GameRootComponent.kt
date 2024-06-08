@@ -3,6 +3,7 @@ package com.danilovfa.deskmotion.receiver.features.game.root
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.danilovfa.deskmotion.receiver.features.game.configuration.bluetooth.BluetoothComponent
+import com.danilovfa.deskmotion.receiver.features.game.configuration.user.UserConfigComponent
 import com.danilovfa.deskmotion.receiver.features.game.configuration.wifi.WifiComponent
 import com.danilovfa.deskmotion.receiver.features.game.finish.GameFinishComponent
 import com.danilovfa.deskmotion.receiver.features.game.game.GameComponent
@@ -14,6 +15,7 @@ interface GameRootComponent {
 
     sealed class Child {
         data class Main(val component: GameSelectConnectionComponent) : Child()
+        data class User(val component: UserConfigComponent) : Child()
         data class Wifi(val component: WifiComponent) : Child()
         data class Bluetooth(val component: BluetoothComponent) : Child()
         data class Game(val component: GameComponent) : Child()

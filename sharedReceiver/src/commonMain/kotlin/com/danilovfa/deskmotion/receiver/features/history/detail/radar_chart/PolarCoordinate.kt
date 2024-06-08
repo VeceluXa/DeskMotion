@@ -17,10 +17,10 @@ fun Coordinate.toPolarCoordinate(): PolarCoordinate {
     val radius = sqrt(centeredX * centeredX + centeredY * centeredY)
     val angleInRadians = atan2(centeredY, centeredX)
 
-    val positiveAngle = if (angleInRadians < 0) angleInRadians + (2 * Math.PI) else angleInRadians
+//    val positiveAngle = if (angleInRadians < 0) angleInRadians + (2 * Math.PI) else angleInRadians
 
     return PolarCoordinate(
-        angleInRadians = positiveAngle,
+        angleInRadians = angleInRadians,
         radius = radius
     )
 }

@@ -9,10 +9,9 @@ interface LevelsStore : Store<LevelsStore.Intent, LevelsStore.State, LevelsStore
     }
 
     data class State(
-        val levels: List<Level> = emptyList()
-    ) {
-        val isLoaderVisible = levels.isEmpty()
-    }
+        val levels: List<Level> = emptyList(),
+        val isLoading: Boolean = true,
+    )
 
     sealed class Label {
         data class LevelSelected(val level: Level) : Label()

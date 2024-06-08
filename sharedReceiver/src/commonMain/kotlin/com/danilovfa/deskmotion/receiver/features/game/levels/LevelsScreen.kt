@@ -68,20 +68,27 @@ private fun LevelsLayout(
         VSpacer(DeskMotionDimension.layoutLargeMargin)
 
         LazyColumn {
-            items(state.levels) { level ->
+            items(
+                count = state.levels.size,
+                key = { state.levels[it].id }
+            ) { index ->
+                val level = state.levels[index]
                 LevelItem(
-                    level = level,
+                    index = index + 1,
                     onClick = { component.onEvent(LevelsStore.Intent.OnLevelClicked(level)) }
                 )
             }
         }
 
-        LoaderLayout(showLoader = state.isLoaderVisible)
+        LoaderLayout(showLoader = state.isLoading)
     }
 }
 
 @Composable
-private fun LevelItem(level: Level, onClick: () -> Unit) {
+private fun LevelItem(
+    index: Int,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(vertical = DeskMotionDimension.layoutMediumMargin)
@@ -98,7 +105,7 @@ private fun LevelItem(level: Level, onClick: () -> Unit) {
             )
     ) {
         Text(
-            text = level.name,
+            text = stringResource(MR.strings.level, index.toString()),
             style = DeskMotionTypography.textBook24,
             color = DeskMotionTheme.colors.onSurfaceVariant,
             textAlign = TextAlign.Center,

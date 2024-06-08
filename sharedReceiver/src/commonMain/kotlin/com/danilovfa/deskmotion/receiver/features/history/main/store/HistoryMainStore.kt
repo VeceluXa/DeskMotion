@@ -11,6 +11,7 @@ interface HistoryMainStore: Store<HistoryMainStore.Intent, HistoryMainStore.Stat
 
     data class State(
         val logs: List<PlayLog> = emptyList(),
+        val isTheOnlyChild: Boolean = true,
         val isLoading: Boolean = true,
         val isError: Boolean = false,
         val errorMessage: String = ""

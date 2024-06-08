@@ -33,8 +33,12 @@ val defaultNavigationItems = listOf(
     NavigationItemData(
         config = DefaultRootComponent.Config.History,
         nameResource = MR.strings.history,
-        painter = { DeskMotionIcon.History },
-        isActive = false
+        painter = { DeskMotionIcon.History }
+    ),
+    NavigationItemData(
+        config = DefaultRootComponent.Config.Settings,
+        nameResource = MR.strings.settings,
+        painter = { DeskMotionIcon.Settings }
     )
 )
 
@@ -42,7 +46,7 @@ data class NavigationItemData(
     val config: DefaultRootComponent.Config,
     val nameResource: StringResource,
     val painter: @Composable () -> Painter,
-    val isActive: Boolean
+    val isActive: Boolean = false
 )
 
 @Composable

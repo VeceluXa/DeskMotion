@@ -5,7 +5,5 @@ import com.danilovfa.deskmotion.receiver.domain.repository.DeskMotionRepository
 import org.koin.dsl.module
 
 val receiverDataModule = module {
-    factory<DeskMotionRepository> {
-        DeskMotionRepositoryImpl(get())
-    }
+    single<DeskMotionRepository> { DeskMotionRepositoryImpl(get()) }
 }

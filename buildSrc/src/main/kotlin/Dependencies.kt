@@ -37,10 +37,17 @@ object Dependencies {
         const val androidDriver = "$nameSpace:android-driver:${Versions.sqldelight}"
     }
 
+    object Preferences {
+        const val core = "com.russhwolf:multiplatform-settings:${Versions.preferences}"
+        const val noArgs = "com.russhwolf:multiplatform-settings-no-arg:${Versions.preferences}"
+        const val coroutines = "com.russhwolf:multiplatform-settings-coroutines:${Versions.preferences}"
+    }
+
     const val kotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
     const val kotlinxDateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDateTime}"
     const val kermit = "co.touchlab:kermit:${Versions.kermit}"
     const val ktor = "io.ktor:ktor-network:${Versions.ktor}"
     const val aayChart = "io.github.thechance101:chart:${Versions.aayChart}"
     const val apacheCommons = "org.apache.commons:commons-lang3:${Versions.apacheCommons}"
+    const val dataStore = "androidx.datastore:datastore-preferences-core:${Versions.dataStore}"
 }

@@ -16,7 +16,13 @@ fun generateRadarChartData(coordinates: List<PolarCoordinate>): List<PolarFreque
     var maxFrequency = 0.0
 
     coordinates.forEach { coordinate ->
-        val angleInDegrees = Math.toDegrees(coordinate.angleInRadians).roundToInt()
+        val angleInDegrees = Math.toDegrees(coordinate.angleInRadians).roundToInt().run {
+            if (this > 0) {
+                this
+            } else {
+                this + 360
+            }
+        }
 
         frequencies = frequencies.map { frequency ->
             if (angleInDegrees in frequency.angleRange) {
