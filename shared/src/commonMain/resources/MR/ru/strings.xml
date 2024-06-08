@@ -34,6 +34,8 @@
     <string name="first_name">Имя</string>
     <string name="last_name">Фамилия</string>
     <string name="middle_name">Отчество</string>
+    <string name="date_of_birth">Дата рождения</string>
+    <string name="settings_user">Настройки пользователя</string>
     <!-- End of section -->
 
     <!--  General section  -->

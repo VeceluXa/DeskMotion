@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.danilovfa.deskmotion.receiver.features.game.configuration.bluetooth.BluetoothScreen
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.UserConfigScreen
+import com.danilovfa.deskmotion.receiver.features.common.user_config.UserConfigScreen
 import com.danilovfa.deskmotion.receiver.features.game.configuration.wifi.WifiScreen
 import com.danilovfa.deskmotion.receiver.features.game.finish.GameFinishScreen
 import com.danilovfa.deskmotion.receiver.features.game.game.GameScreen

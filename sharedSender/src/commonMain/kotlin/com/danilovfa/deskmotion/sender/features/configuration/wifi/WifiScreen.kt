@@ -16,7 +16,7 @@ import com.danilovfa.deskmotion.MR
 import com.danilovfa.deskmotion.sender.features.configuration.wifi.store.WifiStore
 import com.danilovfa.deskmotion.ui.theme.DeskMotionDimension
 import com.danilovfa.deskmotion.ui.view.VSpacer
-import com.danilovfa.deskmotion.ui.view.buttons.PrimaryButtonLarge
+import com.danilovfa.deskmotion.ui.view.buttons.ButtonLarge
 import com.danilovfa.deskmotion.ui.view.text.LargeTextField
 import com.danilovfa.deskmotion.ui.view.text.Text
 import com.danilovfa.deskmotion.ui.view.toolbar.NavigationIcon
@@ -78,7 +78,7 @@ private fun WifiConfig(component: WifiComponent, state: WifiStore.State) {
 
 
         VSpacer(DeskMotionDimension.layoutLargeMargin)
-        PrimaryButtonLarge(
+        ButtonLarge(
             text = stringResource(MR.strings.start),
             onClick = { component.onEvent(WifiStore.Intent.OnStartClicked) },
             enabled = state.isButtonEnabled,

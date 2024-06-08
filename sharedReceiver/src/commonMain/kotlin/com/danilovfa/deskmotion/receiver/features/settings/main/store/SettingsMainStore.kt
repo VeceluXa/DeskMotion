@@ -11,9 +11,7 @@ interface SettingsMainStore : Store<SettingsMainStore.Intent, SettingsMainStore.
         data class OnLanguageSelected(val locale: DeskMotionLocale) : Intent()
         data class OnIpChanged(val ip: String) : Intent()
         data class OnPortChanged(val port: String) : Intent()
-        data class OnFirstNameChanged(val firstName: String) : Intent()
-        data class OnLastNameChanged(val lastName: String) : Intent()
-        data class OnMiddleNameChanged(val middleName: String) : Intent()
+        data object OnUserConfigClicked : Intent()
         data object OnSaveClicked : Intent()
     }
 
@@ -21,9 +19,6 @@ interface SettingsMainStore : Store<SettingsMainStore.Intent, SettingsMainStore.
         val locale: DeskMotionLocale = DeskMotionLocale.ENGLISH,
         val ip: String = "",
         val port: String = "",
-        val firstName: String = "",
-        val lastName: String = "",
-        val middleName: String = "",
         val isLoading: Boolean = false,
         val isError: Boolean = false,
         val errorMessage: String = ""
@@ -33,5 +28,6 @@ interface SettingsMainStore : Store<SettingsMainStore.Intent, SettingsMainStore.
 
     sealed class Label {
         data object Restart : Label()
+        data object OnUserConfigClicked : Label()
     }
 }

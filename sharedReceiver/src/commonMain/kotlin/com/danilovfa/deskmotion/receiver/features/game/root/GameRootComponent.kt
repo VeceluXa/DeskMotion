@@ -3,7 +3,7 @@ package com.danilovfa.deskmotion.receiver.features.game.root
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.danilovfa.deskmotion.receiver.features.game.configuration.bluetooth.BluetoothComponent
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.UserConfigComponent
+import com.danilovfa.deskmotion.receiver.features.common.user_config.UserConfigComponent
 import com.danilovfa.deskmotion.receiver.features.game.configuration.wifi.WifiComponent
 import com.danilovfa.deskmotion.receiver.features.game.finish.GameFinishComponent
 import com.danilovfa.deskmotion.receiver.features.game.game.GameComponent

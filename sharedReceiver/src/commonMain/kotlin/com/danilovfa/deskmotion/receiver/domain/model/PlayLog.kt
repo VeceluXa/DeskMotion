@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PlayLog(
     val id: Long,
+    val userId: Long,
     val levelId: Long,
     val log: List<Coordinate>,
     val score: Int,

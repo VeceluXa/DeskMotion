@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.danilovfa.deskmotion.receiver.features.common.user_config.UserConfigScreen
 import com.danilovfa.deskmotion.receiver.features.settings.main.SettingsMainScreen
 
 @Composable
@@ -16,6 +17,7 @@ fun SettingsRootScreen(component: SettingsRootComponent) {
         Children(children) {
             when (val child = it.instance) {
                 is SettingsRootComponent.Child.Main -> SettingsMainScreen(child.component)
+                is SettingsRootComponent.Child.UserConfig -> UserConfigScreen(child.component)
             }
         }
     }

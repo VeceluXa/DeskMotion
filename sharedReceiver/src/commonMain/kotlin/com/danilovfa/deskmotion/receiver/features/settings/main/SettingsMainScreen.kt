@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,6 +24,7 @@ import com.danilovfa.deskmotion.ui.view.toolbar.Toolbar
 import dev.icerock.moko.resources.compose.stringResource
 import com.danilovfa.deskmotion.MR
 import com.danilovfa.deskmotion.receiver.features.settings.main.store.SettingsMainStore
+import com.danilovfa.deskmotion.receiver.features.settings.main.store.SettingsMainStore.Intent
 import com.danilovfa.deskmotion.ui.theme.DeskMotionDimension
 import com.danilovfa.deskmotion.ui.view.HSpacer
 import com.danilovfa.deskmotion.ui.view.WSpacer
@@ -32,11 +32,12 @@ import com.danilovfa.deskmotion.ui.view.buttons.Button
 import com.danilovfa.deskmotion.ui.view.buttons.OutlinedButton
 import com.danilovfa.deskmotion.ui.view.popup.MenuItemsData
 import com.danilovfa.deskmotion.ui.view.popup.PopupMenu
-import com.danilovfa.deskmotion.ui.view.text.LargeTextField
 import com.danilovfa.deskmotion.ui.view.text.Text
 import com.danilovfa.deskmotion.receiver.utils.locale.DeskMotionLocale
 import com.danilovfa.deskmotion.ui.theme.DeskMotionTypography
 import com.danilovfa.deskmotion.ui.view.VSpacer
+import com.danilovfa.deskmotion.ui.view.buttons.DeskMotionButtonColors
+import com.danilovfa.deskmotion.ui.view.buttons.ButtonLarge
 import com.danilovfa.deskmotion.ui.view.text.TextField
 
 @Composable
@@ -62,19 +63,21 @@ private fun SettingsMainLayout(state: SettingsMainStore.State, component: Settin
         ) {
             LanguagesDropDown(
                 currentItem = state.locale,
-                onSelected = { component.onEvent(SettingsMainStore.Intent.OnLanguageSelected(it)) },
+                onSelected = { component.onEvent(Intent.OnLanguageSelected(it)) },
                 modifier = Modifier.padding(horizontal = 12.dp)
             )
 
-            HSpacer(32.dp)
+            VSpacer(8.dp)
 
             NetworkSettings(state, component)
 
-            HSpacer(32.dp)
+            VSpacer(8.dp)
 
-            UserSettings(state, component)
+            UserSettings(
+                onClick = { component.onEvent(Intent.OnUserConfigClicked) }
+            )
 
-            HSpacer(96.dp)
+            VSpacer(32.dp)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -82,7 +85,7 @@ private fun SettingsMainLayout(state: SettingsMainStore.State, component: Settin
             ) {
                 Button(
                     text = stringResource(MR.strings.save),
-                    onClick = { component.onEvent(SettingsMainStore.Intent.OnSaveClicked) },
+                    onClick = { component.onEvent(Intent.OnSaveClicked) },
                     enabled = state.isSaveButtonEnabled
                 )
             }
@@ -92,32 +95,15 @@ private fun SettingsMainLayout(state: SettingsMainStore.State, component: Settin
 
 @Composable
 private fun UserSettings(
-    state: SettingsMainStore.State,
-    component: SettingsMainComponent,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    ButtonLarge(
+        text = stringResource(MR.strings.settings_user),
+        onClick = onClick,
+        colors = DeskMotionButtonColors.secondaryButtonColors(),
         modifier = modifier
-            .fillMaxWidth()
-    ) {
-        TextField(
-            value = state.firstName,
-            onValueChange = { component.onEvent(SettingsMainStore.Intent.OnFirstNameChanged(it)) },
-            labelText = stringResource(MR.strings.first_name),
-        )
-        WSpacer()
-        TextField(
-            value = state.lastName,
-            onValueChange = { component.onEvent(SettingsMainStore.Intent.OnLastNameChanged(it)) },
-            labelText = stringResource(MR.strings.last_name)
-        )
-        WSpacer()
-        TextField(
-            value = state.middleName,
-            onValueChange = { component.onEvent(SettingsMainStore.Intent.OnMiddleNameChanged(it)) },
-            labelText = stringResource(MR.strings.middle_name)
-        )
-    }
+    )
 }
 
 @Composable
@@ -132,13 +118,13 @@ private fun NetworkSettings(
     ) {
         TextField(
             value = state.ip,
-            onValueChange = { component.onEvent(SettingsMainStore.Intent.OnIpChanged(it)) },
+            onValueChange = { component.onEvent(Intent.OnIpChanged(it)) },
             labelText = stringResource(MR.strings.ip)
         )
         WSpacer()
         TextField(
             value = state.port,
-            onValueChange = { component.onEvent(SettingsMainStore.Intent.OnPortChanged(it)) },
+            onValueChange = { component.onEvent(Intent.OnPortChanged(it)) },
             labelText = stringResource(MR.strings.port)
         )
     }

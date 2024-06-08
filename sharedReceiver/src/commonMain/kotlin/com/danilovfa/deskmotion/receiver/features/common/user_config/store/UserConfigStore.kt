@@ -1,9 +1,10 @@
-package com.danilovfa.deskmotion.receiver.features.game.configuration.user.store
+package com.danilovfa.deskmotion.receiver.features.common.user_config.store
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.Intent
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.Label
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.State
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Intent
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Label
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.State
+import com.danilovfa.deskmotion.utils.time.now
 import kotlinx.datetime.LocalDate
 
 interface UserConfigStore : Store<Intent, State, Label> {
@@ -12,7 +13,7 @@ interface UserConfigStore : Store<Intent, State, Label> {
         data class OnFirstNameChanged(val firstName: String) : Intent()
         data class OnLastNameChanged(val lastName: String) : Intent()
         data class OnMiddleNameChanged(val middleName: String) : Intent()
-        data object OnNextClicked : Intent()
+        data object OnSaveClicked : Intent()
         data object OnErrorDismissed : Intent()
         data class OnDatePickerConfirmed(val dateOfBirth: LocalDate) : Intent()
         data object OnDatePickerDismissed : Intent()
@@ -23,16 +24,17 @@ interface UserConfigStore : Store<Intent, State, Label> {
         val firstName: String = "",
         val lastName: String = "",
         val middleName: String = "",
-        val dateOfBirth: LocalDate? = null,
+        val dateOfBirth: LocalDate = LocalDate.now(),
         val isError: Boolean = false,
         val errorMessage: String = "",
-        val isDatePickerVisible: Boolean = false
+        val isDatePickerVisible: Boolean = false,
+        val isBackButtonVisible: Boolean
     ) {
-        val isNextButtonEnabled: Boolean get() = firstName != "" && lastName != "" && !isError
+        val isSaveButtonEnabled: Boolean get() = firstName != "" && lastName != "" && !isError
     }
 
     sealed class Label {
         data object NavigateBack : Label()
-        data class NavigateNext(val firstName: String, val lastName: String, val middleName: String) : Label()
+        data object NavigateNext : Label()
     }
 }

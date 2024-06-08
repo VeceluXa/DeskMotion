@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -265,6 +266,96 @@ fun LargeTextField(
 }
 
 @Composable
+fun LargeSelectableTextField(
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = DeskMotionTypography.textBook18,
+    labelText: String = "",
+    hintText: String = "",
+    showHint: Boolean = true,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    singleLine: Boolean = true,
+    isRequired: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    colors: TextFieldColors = DeskMotionTextFieldDefaults.selectableTextFieldColors(),
+) {
+    SelectableTextField(
+        value = value,
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        textStyle = textStyle,
+        labelText = labelText,
+        hintText = hintText,
+        showHint = showHint,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        isError = isError,
+        visualTransformation = visualTransformation,
+        singleLine = singleLine,
+        isRequired = isRequired,
+        maxLines = maxLines,
+        colors = colors
+    )
+}
+
+@Composable
+fun SelectableTextField(
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = DeskMotionTypography.textBook18,
+    labelText: String = "",
+    hintText: String = "",
+    showHint: Boolean = true,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    singleLine: Boolean = true,
+    isRequired: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    colors: TextFieldColors = DeskMotionTextFieldDefaults.selectableTextFieldColors(),
+) {
+    val textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
+    val textFieldValue = textFieldValueState.copy(text = value)
+
+    Column(modifier = modifier) {
+        BaseTextField(
+            value = textFieldValue,
+            onValueChange = {},
+            enabled = false,
+            readOnly = true,
+            textStyle = textStyle,
+            label = {
+                if (isRequired) {
+                    androidx.compose.material.Text(text = labelText.addAsterisk())
+                } else {
+                    androidx.compose.material.Text(text = labelText)
+                }
+            },
+            placeholder = placeholder,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            isError = isError,
+            visualTransformation = visualTransformation,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            colors = colors,
+            modifier = modifier
+                .clickable(onClick = onClick),
+        )
+        TextFieldHint(hintText, showHint, isError)
+    }
+}
+
+@Composable
 private fun ColumnScope.TextFieldHint(
     hintText: String = "",
     showHint: Boolean = true,
@@ -453,6 +544,54 @@ object TextFieldDefaults {
         errorLabelColor: Color = DeskMotionTheme.colors.error,
         placeholderColor: Color = DeskMotionTheme.colors.onBackground,
         disabledPlaceholderColor: Color = DeskMotionTheme.colors.inverseSurface,
+    ): TextFieldColors = TextFieldDefaults.textFieldColors(
+        textColor = textColor,
+        disabledTextColor = disabledTextColor,
+        cursorColor = cursorColor,
+        errorCursorColor = errorCursorColor,
+        focusedIndicatorColor = focusedIndicatorColor,
+        unfocusedIndicatorColor = unfocusedIndicatorColor,
+        errorIndicatorColor = errorIndicatorColor,
+        disabledIndicatorColor = disabledIndicatorColor,
+        leadingIconColor = leadingIconColor,
+        disabledLeadingIconColor = disabledLeadingIconColor,
+        errorLeadingIconColor = errorLeadingIconColor,
+        trailingIconColor = trailingIconColor,
+        disabledTrailingIconColor = disabledTrailingIconColor,
+        errorTrailingIconColor = errorTrailingIconColor,
+        backgroundColor = backgroundColor,
+        focusedLabelColor = focusedLabelColor,
+        unfocusedLabelColor = unfocusedLabelColor,
+        disabledLabelColor = disabledLabelColor,
+        errorLabelColor = errorLabelColor,
+        placeholderColor = placeholderColor,
+        disabledPlaceholderColor = disabledPlaceholderColor
+    )
+
+    @Suppress("LongParameterList")
+    @Composable
+    fun selectableTextFieldColors(
+        textColor: Color = DeskMotionTheme.colors.onBackground,
+        disabledTextColor: Color = DeskMotionTheme.colors.onBackground,
+        backgroundColor: Color = Color.Transparent,
+        cursorColor: Color = DeskMotionTheme.colors.onBackground,
+        errorCursorColor: Color = DeskMotionTheme.colors.error,
+        focusedIndicatorColor: Color = DeskMotionTheme.colors.secondary,
+        unfocusedIndicatorColor: Color = DeskMotionTheme.colors.secondary,
+        disabledIndicatorColor: Color = DeskMotionTheme.colors.secondary,
+        errorIndicatorColor: Color = DeskMotionTheme.colors.error,
+        leadingIconColor: Color = DeskMotionTheme.colors.secondary,
+        disabledLeadingIconColor: Color = DeskMotionTheme.colors.secondary,
+        errorLeadingIconColor: Color = DeskMotionTheme.colors.error,
+        trailingIconColor: Color = DeskMotionTheme.colors.onBackground,
+        disabledTrailingIconColor: Color = DeskMotionTheme.colors.onBackground,
+        errorTrailingIconColor: Color = DeskMotionTheme.colors.onBackground,
+        focusedLabelColor: Color = DeskMotionTheme.colors.onBackground,
+        unfocusedLabelColor: Color = DeskMotionTheme.colors.onSecondaryContainer,
+        disabledLabelColor: Color = DeskMotionTheme.colors.onSecondaryContainer,
+        errorLabelColor: Color = DeskMotionTheme.colors.error,
+        placeholderColor: Color = DeskMotionTheme.colors.onBackground,
+        disabledPlaceholderColor: Color = DeskMotionTheme.colors.onBackground,
     ): TextFieldColors = TextFieldDefaults.textFieldColors(
         textColor = textColor,
         disabledTextColor = disabledTextColor,

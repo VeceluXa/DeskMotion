@@ -181,6 +181,7 @@ class GameStoreFactory(
 
             val playLog = PlayLog(
                 id = 0L,
+                userId = settings.getLong(SETTINGS_USER_ID, 0L),
                 levelId = level.id,
                 log = log,
                 score = score,

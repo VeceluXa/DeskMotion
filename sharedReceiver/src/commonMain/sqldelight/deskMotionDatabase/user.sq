@@ -18,6 +18,13 @@ INTO userEntity(
     dateOfBirth
 ) VALUES (?, ?, ?, ?, ?);
 
+lastInsertedUserId:
+SELECT last_insert_rowid() LIMIT 1;
+
+getUser:
+SELECT * FROM userEntity
+WHERE id = :id LIMIT 1;
+
 deleteUser:
 DELETE FROM userEntity
 WHERE id = :id;

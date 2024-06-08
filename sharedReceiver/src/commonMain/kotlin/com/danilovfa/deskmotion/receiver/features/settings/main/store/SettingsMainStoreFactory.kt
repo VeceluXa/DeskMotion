@@ -10,6 +10,7 @@ import com.danilovfa.deskmotion.library.lce.onEachContent
 import com.danilovfa.deskmotion.library.lce.onEachError
 import com.danilovfa.deskmotion.library.lce.onEachLoading
 import com.danilovfa.deskmotion.receiver.features.settings.main.store.SettingsMainStore.Intent
+import com.danilovfa.deskmotion.receiver.features.settings.main.store.SettingsMainStore.Label
 import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_FIRST_NAME
 import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_IP_KEY
 import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_LANGUAGE_KEY
@@ -31,7 +32,7 @@ class SettingsMainStoreFactory(
     val settings = Settings()
 
     fun create(): SettingsMainStore = object : SettingsMainStore,
-        Store<Intent, SettingsMainStore.State, SettingsMainStore.Label> by storeFactory.create(
+        Store<Intent, SettingsMainStore.State, Label> by storeFactory.create(
             name = STORE_NAME,
             initialState = SettingsMainStore.State(),
             bootstrapper = SimpleBootstrapper(Action.GetSettings),
@@ -47,9 +48,6 @@ class SettingsMainStoreFactory(
         data class UpdateLocale(val locale: DeskMotionLocale) : Msg()
         data class UpdateIp(val ip: String) : Msg()
         data class UpdatePort(val port: String) : Msg()
-        data class UpdateFirstName(val firstName: String) : Msg()
-        data class UpdateLastName(val lastName: String) : Msg()
-        data class UpdateMiddleName(val middleName: String) : Msg()
         data object ShowLoading : Msg()
         data object HideLoading : Msg()
         data class ShowError(val message: String) : Msg()
@@ -57,7 +55,7 @@ class SettingsMainStoreFactory(
     }
 
     private inner class ExecutorImpl :
-        CoroutineExecutor<Intent, Action, SettingsMainStore.State, Msg, SettingsMainStore.Label>(
+        CoroutineExecutor<Intent, Action, SettingsMainStore.State, Msg, Label>(
             Dispatchers.Main
         ), KoinComponent {
 
@@ -75,36 +73,25 @@ class SettingsMainStoreFactory(
             is Intent.OnPortChanged -> dispatch(Msg.UpdatePort(intent.port))
             Intent.OnSaveClicked -> onSaveClicked(
                 ip = getState().ip,
-                port = getState().port,
-                firstName = getState().firstName,
-                lastName = getState().lastName,
-                middleName = getState().middleName
+                port = getState().port
             )
 
-            is Intent.OnFirstNameChanged -> dispatch(Msg.UpdateFirstName(intent.firstName))
-            is Intent.OnLastNameChanged -> dispatch(Msg.UpdateLastName(intent.lastName))
-            is Intent.OnMiddleNameChanged -> dispatch(Msg.UpdateMiddleName(intent.middleName))
+            Intent.OnUserConfigClicked -> publish(Label.OnUserConfigClicked)
         }
 
         private fun onSaveClicked(
             ip: String,
             port: String,
-            firstName: String,
-            lastName: String,
-            middleName: String
         ) {
             lceFlow {
                 settings[SETTINGS_IP_KEY] = ip
                 settings[SETTINGS_PORT_KEY] = port
-                settings[SETTINGS_FIRST_NAME] = firstName
-                settings[SETTINGS_LAST_NAME] = lastName
-                settings[SETTINGS_MIDDLE_NAME] = middleName
                 emit(Unit)
             }
                 .onEachLoading { dispatch(Msg.ShowLoading) }
                 .onEachContent {
                     dispatch(Msg.HideLoading)
-                    publish(SettingsMainStore.Label.Restart)
+                    publish(Label.Restart)
                 }
                 .onEachError { error ->
                     dispatch(Msg.HideLoading)
@@ -122,16 +109,10 @@ class SettingsMainStoreFactory(
 
             val ip: String = settings[SETTINGS_IP_KEY] ?: ""
             val port: String = settings[SETTINGS_PORT_KEY] ?: ""
-            val firstName: String = settings[SETTINGS_FIRST_NAME] ?: ""
-            val lastName: String = settings[SETTINGS_LAST_NAME] ?: ""
-            val middleName: String = settings[SETTINGS_MIDDLE_NAME] ?: ""
 
             dispatch(Msg.UpdateLocale(locale))
             dispatch(Msg.UpdateIp(ip))
             dispatch(Msg.UpdatePort(port))
-            dispatch(Msg.UpdateFirstName(firstName))
-            dispatch(Msg.UpdateLastName(lastName))
-            dispatch(Msg.UpdateMiddleName(middleName))
         }
 
         private fun updateLocale(locale: DeskMotionLocale) {
@@ -144,7 +125,7 @@ class SettingsMainStoreFactory(
                     dispatch(Msg.HideLoading)
                     dispatch(Msg.UpdateLocale(locale))
                     setLocale(locale)
-                    publish(SettingsMainStore.Label.Restart)
+                    publish(Label.Restart)
                 }
                 .onEachError { error ->
                     dispatch(Msg.HideLoading)
@@ -164,9 +145,6 @@ class SettingsMainStoreFactory(
                 Msg.HideError -> copy(isError = false, errorMessage = "")
                 is Msg.UpdateIp -> copy(ip = msg.ip)
                 is Msg.UpdatePort -> copy(port = msg.port)
-                is Msg.UpdateFirstName -> copy(firstName = msg.firstName)
-                is Msg.UpdateLastName -> copy(lastName = msg.lastName)
-                is Msg.UpdateMiddleName -> copy(middleName = msg.middleName)
             }
     }
 

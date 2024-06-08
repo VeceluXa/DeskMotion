@@ -2,9 +2,10 @@ package com.danilovfa.deskmotion.utils.time
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 
 fun currentTime() = Clock.System.now().toEpochMilliseconds()
 
@@ -28,4 +29,14 @@ fun formattedDateTime(epochMillis: Long): String {
     val day = localDateTime.dayOfMonth.toString().padStart(2, '0')
 
     return "$year.$month.$day $hours:$minutes:$seconds"
+}
+
+fun LocalDate.Companion.now(): LocalDate {
+    return Clock.System.todayIn(TimeZone.currentSystemDefault())
+}
+
+fun LocalDate.formatted(): String {
+    val day = dayOfMonth.toString().padStart(2, '0')
+    val month = monthNumber.toString().padStart(2, '0')
+    return "$day.$month.$year"
 }

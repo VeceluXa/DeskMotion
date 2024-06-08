@@ -10,5 +10,6 @@ interface SettingsMainComponent {
 
     sealed class Output {
         data object Restart : Output()
+        data object OpenUserConfig : Output()
     }
 }

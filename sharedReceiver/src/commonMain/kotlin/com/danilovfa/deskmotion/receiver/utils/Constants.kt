@@ -16,6 +16,5 @@ object Constants {
     const val SETTINGS_FIRST_NAME = "first_name"
     const val SETTINGS_LAST_NAME = "last_name"
     const val SETTINGS_MIDDLE_NAME = "middle_name"
-
     const val SETTINGS_USER_ID = "user_id"
 }

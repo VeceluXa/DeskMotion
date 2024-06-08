@@ -1,14 +1,13 @@
-package com.danilovfa.deskmotion.receiver.features.game.configuration.user
+package com.danilovfa.deskmotion.receiver.features.common.user_config
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.danilovfa.deskmotion.receiver.domain.model.Level
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.UserConfigComponent.Output
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStoreFactory
+import com.danilovfa.deskmotion.receiver.features.common.user_config.UserConfigComponent.Output
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStoreFactory
 import com.danilovfa.deskmotion.ui.decompose.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,13 +18,13 @@ import kotlinx.coroutines.flow.onEach
 class DefaultUserConfigComponent(
     private val storeFactory: StoreFactory,
     private val componentContext: ComponentContext,
-    private val level: Level,
+    private val isSettings: Boolean,
     private val output: (Output) -> Unit
 ) : UserConfigComponent, ComponentContext by componentContext {
     private val scope = coroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val store = instanceKeeper.getStore {
-        UserConfigStoreFactory(storeFactory).create()
+        UserConfigStoreFactory(storeFactory, isSettings).create()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,7 +39,7 @@ class DefaultUserConfigComponent(
             .onEach { label ->
                 when (label) {
                     UserConfigStore.Label.NavigateBack -> output(Output.NavigateBack)
-                    is UserConfigStore.Label.NavigateNext -> output(Output.NavigateNext(level))
+                    is UserConfigStore.Label.NavigateNext -> output(Output.NavigateNext)
                 }
             }
             .launchIn(scope)

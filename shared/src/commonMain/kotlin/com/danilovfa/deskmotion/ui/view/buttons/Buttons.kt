@@ -96,7 +96,7 @@ fun Button(
 }
 
 @Composable
-fun PrimaryButtonLarge(
+fun ButtonLarge(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -346,6 +346,14 @@ object DeskMotionButtonColors {
         contentColor = DeskMotionTheme.colors.onPrimary,
         disabledBackgroundColor = DeskMotionTheme.colors.secondary,
         disabledContentColor = DeskMotionTheme.colors.onSecondary,
+    )
+
+    @Composable
+    fun secondaryButtonColors() = ButtonDefaults.buttonColors(
+        backgroundColor = DeskMotionTheme.colors.secondary,
+        contentColor = DeskMotionTheme.colors.onSecondary,
+        disabledBackgroundColor = DeskMotionTheme.colors.secondary.copy(alpha = 0.7f),
+        disabledContentColor = DeskMotionTheme.colors.onSecondary
     )
 
     @Composable

@@ -1,32 +1,35 @@
-package com.danilovfa.deskmotion.receiver.features.game.configuration.user.store
+package com.danilovfa.deskmotion.receiver.features.common.user_config.store
 
+import co.touchlab.kermit.Logger
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.store.create
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.danilovfa.deskmotion.library.lce.lceFlow
 import com.danilovfa.deskmotion.library.lce.onEachContent
 import com.danilovfa.deskmotion.library.lce.onEachError
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.Intent
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.Label
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.State
-import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_FIRST_NAME
-import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_LAST_NAME
-import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_MIDDLE_NAME
+import com.danilovfa.deskmotion.receiver.domain.model.user.User
+import com.danilovfa.deskmotion.receiver.domain.repository.UserRepository
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Intent
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Label
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.State
+import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_USER_ID
 import com.russhwolf.settings.Settings
-import com.russhwolf.settings.get
-import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.datetime.LocalDate
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class UserConfigStoreFactory(
-    private val storeFactory: StoreFactory
+    private val storeFactory: StoreFactory,
+    private val isSettings: Boolean
 ) {
     fun create(): UserConfigStore = object : UserConfigStore,
         Store<Intent, State, Label> by storeFactory.create(
             name = STORE_NAME,
-            initialState = State(),
+            initialState = State(isBackButtonVisible = isSettings),
             bootstrapper = SimpleBootstrapper(Action.LoadSettings),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
@@ -47,11 +50,12 @@ class UserConfigStoreFactory(
     }
 
     private inner class ExecutorImpl :
-        CoroutineExecutor<Intent, Action, State, Msg, Label>() {
+        CoroutineExecutor<Intent, Action, State, Msg, Label>(), KoinComponent {
         private val settings = Settings()
+        private val userRepository: UserRepository by inject()
 
         override fun executeAction(action: Action, getState: () -> State) = when (action) {
-            Action.LoadSettings -> loadSettings()
+            Action.LoadSettings -> loadUser()
         }
 
         override fun executeIntent(intent: Intent, getState: () -> State) = when (intent) {
@@ -60,10 +64,11 @@ class UserConfigStoreFactory(
             is Intent.OnFirstNameChanged -> dispatch(Msg.UpdateFirstName(intent.firstName))
             is Intent.OnLastNameChanged -> dispatch(Msg.UpdateLastName(intent.lastName))
             is Intent.OnMiddleNameChanged -> dispatch(Msg.UpdateMiddleName(intent.middleName))
-            Intent.OnNextClicked -> saveSettings(
+            Intent.OnSaveClicked -> saveSettings(
                 firstName = getState().firstName,
                 lastName = getState().lastName,
-                middleName = getState().middleName
+                middleName = getState().middleName,
+                dateOfBirth = getState().dateOfBirth
             )
 
             is Intent.OnDatePickerConfirmed -> {
@@ -74,37 +79,55 @@ class UserConfigStoreFactory(
             Intent.OnDateOfBirthClicked -> dispatch(Msg.ShowDatePicker)
         }
 
-        private fun saveSettings(firstName: String, lastName: String, middleName: String) {
+        private fun saveSettings(firstName: String, lastName: String, middleName: String, dateOfBirth: LocalDate) {
             lceFlow {
-                settings[SETTINGS_FIRST_NAME] = firstName
-                settings[SETTINGS_LAST_NAME] = lastName
-                settings[SETTINGS_MIDDLE_NAME] = middleName
+                val userId = settings.getLongOrNull(SETTINGS_USER_ID)
+
+                Logger.d { "UserId: $userId" }
+
+                val user = User(
+                    id = userId ?: 0L,
+                    firstName = firstName,
+                    lastName = lastName,
+                    middleName = middleName,
+                    dateOfBirth = dateOfBirth
+                )
+
+                if (userId != null) {
+                    userRepository.updateUser(user)
+                } else {
+                    userRepository.addUser(user)
+                }
+
                 emit(Unit)
             }
                 .onEachError { error ->
                     dispatch(Msg.ShowError(error.message ?: ""))
                 }
                 .onEachContent {
-                    publish(Label.NavigateNext(firstName, lastName, middleName))
+                    publish(Label.NavigateNext)
                 }
                 .launchIn(scope)
         }
 
-        private fun loadSettings() {
+        private fun loadUser() {
             lceFlow {
-                val firstName = settings[SETTINGS_FIRST_NAME] ?: ""
-                val lastName = settings[SETTINGS_LAST_NAME] ?: ""
-                val middleName = settings[SETTINGS_MIDDLE_NAME] ?: ""
+                val userId = settings.getLongOrNull(SETTINGS_USER_ID)
 
-                emit(Name(firstName, lastName, middleName))
+                if (userId != null) {
+                    emit(userRepository.getUser(userId))
+                }
             }
                 .onEachError { error ->
                     dispatch(Msg.ShowError(error.message ?: ""))
                 }
-                .onEachContent { name ->
-                    dispatch(Msg.UpdateFirstName(name.firstName))
-                    dispatch(Msg.UpdateLastName(name.lastName))
-                    dispatch(Msg.UpdateMiddleName(name.middleName))
+                .onEachContent { user ->
+                    user?.let {
+                        dispatch(Msg.UpdateFirstName(user.firstName))
+                        dispatch(Msg.UpdateLastName(user.lastName))
+                        dispatch(Msg.UpdateMiddleName(user.middleName))
+                        dispatch(Msg.UpdateDateOfBirth(user.dateOfBirth))
+                    }
                 }
                 .launchIn(scope)
         }

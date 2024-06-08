@@ -5,6 +5,7 @@ import deskMotionDatabase.PlayLogEntity
 
 fun PlayLogEntity.toPlayLog() = PlayLog(
     id = id,
+    userId = userId,
     levelId = levelId,
     log = log,
     score = score.toInt(),

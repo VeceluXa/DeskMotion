@@ -1,16 +1,10 @@
-package com.danilovfa.deskmotion.receiver.features.game.configuration.user
+package com.danilovfa.deskmotion.receiver.features.common.user_config
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,24 +16,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.danilovfa.deskmotion.MR
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore
-import com.danilovfa.deskmotion.receiver.features.game.configuration.user.store.UserConfigStore.Intent
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore
+import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Intent
 import com.danilovfa.deskmotion.ui.theme.DeskMotionDimension
 import com.danilovfa.deskmotion.ui.theme.DeskMotionTheme
 import com.danilovfa.deskmotion.ui.view.VSpacer
 import com.danilovfa.deskmotion.ui.view.animation.IconAnimatedVisibility
-import com.danilovfa.deskmotion.ui.view.buttons.PrimaryButtonLarge
+import com.danilovfa.deskmotion.ui.view.buttons.ButtonLarge
 import com.danilovfa.deskmotion.ui.view.buttons.TextButton
 import com.danilovfa.deskmotion.ui.view.dialog.AlertDialog
+import com.danilovfa.deskmotion.ui.view.text.LargeSelectableTextField
 import com.danilovfa.deskmotion.ui.view.text.LargeTextField
-import com.danilovfa.deskmotion.ui.view.text.Text
 import com.danilovfa.deskmotion.ui.view.toolbar.NavigationIcon
 import com.danilovfa.deskmotion.ui.view.toolbar.Toolbar
+import com.danilovfa.deskmotion.utils.time.formatted
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -69,9 +60,9 @@ private fun UserConfigLayout(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Toolbar(
-            title = stringResource(MR.strings.wifi),
-            navigationIcon = NavigationIcon.Back,
-            onNavigationClick = { onIntent(Intent.OnBackClicked) }
+            title = stringResource(MR.strings.settings_user),
+            navigationIcon = if (state.isBackButtonVisible) NavigationIcon.Back else null,
+            onNavigationClick = { if (state.isBackButtonVisible) onIntent(Intent.OnBackClicked) }
         )
         UserConfig(state, onIntent)
     }
@@ -111,10 +102,10 @@ private fun UserConfig(state: UserConfigStore.State, onIntent: (Intent) -> Unit)
         )
 
         VSpacer(DeskMotionDimension.layoutLargeMargin)
-        PrimaryButtonLarge(
+        ButtonLarge(
             text = stringResource(MR.strings.save),
-            onClick = { onIntent(Intent.OnNextClicked) },
-            enabled = state.isNextButtonEnabled,
+            onClick = { onIntent(Intent.OnSaveClicked) },
+            enabled = state.isSaveButtonEnabled,
             modifier = Modifier.padding(DeskMotionDimension.layoutHorizontalMargin)
         )
 
@@ -138,39 +129,16 @@ private fun UserConfig(state: UserConfigStore.State, onIntent: (Intent) -> Unit)
 
 @Composable
 private fun DateOfBirthField(
-    dateOfBirth: LocalDate?,
+    dateOfBirth: LocalDate,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val text = dateOfBirth?.let { "${it.dayOfMonth}.${it.monthNumber}.${it.year}" }
-        ?: stringResource(MR.strings.date_of_birth)
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    LargeSelectableTextField(
+        value = dateOfBirth.formatted(),
+        onClick = onClick,
+        labelText = stringResource(MR.strings.date_of_birth),
         modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(
-                color = DeskMotionTheme.colors.secondaryContainer,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .border(
-                width = 2.dp,
-                brush = SolidColor(DeskMotionTheme.colors.secondary),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp)
-    ) {
-        Text(
-            text = text,
-            color = DeskMotionTheme.colors.onSecondaryContainer,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
