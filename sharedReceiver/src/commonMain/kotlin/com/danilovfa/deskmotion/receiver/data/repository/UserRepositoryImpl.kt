@@ -1,9 +1,8 @@
 package com.danilovfa.deskmotion.receiver.data.repository
 
-import co.touchlab.kermit.Logger
 import com.danilovfa.deskmotion.receiver.data.database.mapper.toUser
 import com.danilovfa.deskmotion.receiver.deskMotionDatabase.DeskMotionDatabase
-import com.danilovfa.deskmotion.receiver.domain.model.user.User
+import com.danilovfa.deskmotion.receiver.domain.model.User
 import com.danilovfa.deskmotion.receiver.domain.repository.UserRepository
 import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_USER_ID
 import com.russhwolf.settings.Settings
@@ -20,17 +19,17 @@ class UserRepositoryImpl(
     private val settings = Settings()
 
     override suspend fun addUser(user: User) = withContext(ioDispatcher) {
-        userQueries.insertUser(
-            id = null,
-            firstName = user.firstName,
-            middleName = user.middleName,
-            lastName = user.lastName,
-            dateOfBirth = user.dateOfBirth
-        )
+        val userId = database.transactionWithResult {
+            userQueries.insertUser(
+                id = null,
+                firstName = user.firstName,
+                middleName = user.middleName,
+                lastName = user.lastName,
+                dateOfBirth = user.dateOfBirth
+            )
 
-        val userId = userQueries.lastInsertedUserId().executeAsOne()
-
-        Logger.d { "CreatedUserId=$userId" }
+            userQueries.lastInsertedUserId().executeAsOne()
+        }
 
         settings[SETTINGS_USER_ID] = userId
     }
@@ -50,6 +49,10 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getUser(id: Long): User? = withContext(ioDispatcher) {
-        return@withContext userQueries.getUser(id).executeAsOneOrNull()?.toUser()
+        userQueries.getUser(id).executeAsOneOrNull()?.toUser()
+    }
+
+    override suspend fun getAllUsers(): List<User> = withContext(ioDispatcher) {
+        userQueries.getAllUsers().executeAsList().map { it.toUser() }
     }
 }

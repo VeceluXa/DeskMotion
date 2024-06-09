@@ -113,7 +113,11 @@ fun Toolbar(
                         .padding(horizontal = DeskMotionDimension.layoutHorizontalMargin)
                         .weight(1f),
                 ) {
-                    Text(text = title, style = DeskMotionTypography.textMedium18)
+                    Text(
+                        text = title,
+                        style = DeskMotionTypography.textMedium18,
+                        color = DeskMotionTheme.colors.onSecondaryContainer
+                    )
                 }
 
                 IconAnimatedVisibility(visible = isActionsVisible) {

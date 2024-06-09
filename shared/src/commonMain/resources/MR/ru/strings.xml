@@ -45,5 +45,9 @@
     <string name="error">Ошибка</string>
     <string name="warning">Внимание</string>
     <string name="next">Далее</string>
+    <string name="search">Поиск</string>
+    <string name="ascending">По возрастанию</string>
+    <string name="descending">По убыванию</string>
+    <string name="sort_by">Сортировать:</string>
     <!--  End of section  -->
 </resources>

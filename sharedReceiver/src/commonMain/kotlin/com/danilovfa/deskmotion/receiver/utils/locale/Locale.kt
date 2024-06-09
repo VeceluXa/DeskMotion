@@ -1,6 +1,5 @@
 package com.danilovfa.deskmotion.receiver.utils.locale
 
-import co.touchlab.kermit.Logger
 import dev.icerock.moko.resources.desc.StringDesc
 
 fun setLocale(locale: DeskMotionLocale) {
@@ -12,9 +11,6 @@ fun setLocale(locale: DeskMotionLocale) {
 fun DeskMotionLocale.isCurrent(): Boolean {
     val code = this.code
     val currentLocale = StringDesc.localeType.currentLocale
-    Logger.d("DeskMotionLocale") {
-        "DataStore: $code, Current: ${currentLocale.language}"
-    }
 
     return code in currentLocale.language
 }

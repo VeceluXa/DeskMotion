@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.danilovfa.deskmotion.MR
 import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore
 import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Intent
@@ -26,6 +30,7 @@ import com.danilovfa.deskmotion.ui.view.animation.IconAnimatedVisibility
 import com.danilovfa.deskmotion.ui.view.buttons.ButtonLarge
 import com.danilovfa.deskmotion.ui.view.buttons.TextButton
 import com.danilovfa.deskmotion.ui.view.dialog.AlertDialog
+import com.danilovfa.deskmotion.ui.view.images.DeskMotionIcon
 import com.danilovfa.deskmotion.ui.view.text.LargeSelectableTextField
 import com.danilovfa.deskmotion.ui.view.text.LargeTextField
 import com.danilovfa.deskmotion.ui.view.toolbar.NavigationIcon
@@ -62,7 +67,21 @@ private fun UserConfigLayout(
         Toolbar(
             title = stringResource(MR.strings.settings_user),
             navigationIcon = if (state.isBackButtonVisible) NavigationIcon.Back else null,
-            onNavigationClick = { if (state.isBackButtonVisible) onIntent(Intent.OnBackClicked) }
+            onNavigationClick = { if (state.isBackButtonVisible) onIntent(Intent.OnBackClicked) },
+            isActionsVisible = state.isDeleteButtonVisible,
+            actions = {
+                IconButton(
+                    onClick = { onIntent(Intent.OnDeleteClicked) },
+                    content = {
+                        Icon(
+                            painter = DeskMotionIcon.Delete,
+                            contentDescription = null,
+                            tint = DeskMotionTheme.colors.onSecondaryContainer,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                )
+            }
         )
         UserConfig(state, onIntent)
     }

@@ -19,7 +19,7 @@ INTO userEntity(
 ) VALUES (?, ?, ?, ?, ?);
 
 lastInsertedUserId:
-SELECT last_insert_rowid() LIMIT 1;
+SELECT last_insert_rowid();
 
 getUser:
 SELECT * FROM userEntity

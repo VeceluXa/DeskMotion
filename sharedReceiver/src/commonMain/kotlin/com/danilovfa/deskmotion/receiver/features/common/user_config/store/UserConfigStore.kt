@@ -15,6 +15,7 @@ interface UserConfigStore : Store<Intent, State, Label> {
         data class OnMiddleNameChanged(val middleName: String) : Intent()
         data object OnSaveClicked : Intent()
         data object OnErrorDismissed : Intent()
+        data object OnDeleteClicked : Intent()
         data class OnDatePickerConfirmed(val dateOfBirth: LocalDate) : Intent()
         data object OnDatePickerDismissed : Intent()
         data object OnDateOfBirthClicked : Intent()
@@ -28,9 +29,11 @@ interface UserConfigStore : Store<Intent, State, Label> {
         val isError: Boolean = false,
         val errorMessage: String = "",
         val isDatePickerVisible: Boolean = false,
-        val isBackButtonVisible: Boolean
+        val isSettings: Boolean
     ) {
         val isSaveButtonEnabled: Boolean get() = firstName != "" && lastName != "" && !isError
+        val isBackButtonVisible: Boolean get() = isSettings
+        val isDeleteButtonVisible: Boolean get() = isSettings
     }
 
     sealed class Label {

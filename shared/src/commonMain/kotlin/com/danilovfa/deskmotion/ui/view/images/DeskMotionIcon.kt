@@ -23,4 +23,6 @@ object DeskMotionIcon {
     val Clock: Painter @Composable get() = painterResource(MR.images.icon_clock)
     val Target: Painter @Composable get() = painterResource(MR.images.icon_target)
     val Plus: Painter @Composable get() = painterResource(MR.images.icon_plus)
+    val Search: Painter @Composable get() = painterResource(MR.images.icon_search)
+    val Delete: Painter @Composable get() = painterResource(MR.images.icon_delete)
 }

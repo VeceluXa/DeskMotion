@@ -1,4 +1,4 @@
-package com.danilovfa.deskmotion.receiver.domain.model.user
+package com.danilovfa.deskmotion.receiver.domain.model
 
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable

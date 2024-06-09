@@ -1,22 +1,21 @@
 package com.danilovfa.deskmotion.receiver.features.common.user_config.store
 
-import co.touchlab.kermit.Logger
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.core.store.create
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.danilovfa.deskmotion.library.lce.lceFlow
 import com.danilovfa.deskmotion.library.lce.onEachContent
 import com.danilovfa.deskmotion.library.lce.onEachError
-import com.danilovfa.deskmotion.receiver.domain.model.user.User
+import com.danilovfa.deskmotion.receiver.domain.model.User
 import com.danilovfa.deskmotion.receiver.domain.repository.UserRepository
 import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Intent
 import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.Label
 import com.danilovfa.deskmotion.receiver.features.common.user_config.store.UserConfigStore.State
 import com.danilovfa.deskmotion.receiver.utils.Constants.SETTINGS_USER_ID
 import com.russhwolf.settings.Settings
+import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.datetime.LocalDate
 import org.koin.core.component.KoinComponent
@@ -29,7 +28,7 @@ class UserConfigStoreFactory(
     fun create(): UserConfigStore = object : UserConfigStore,
         Store<Intent, State, Label> by storeFactory.create(
             name = STORE_NAME,
-            initialState = State(isBackButtonVisible = isSettings),
+            initialState = State(isSettings = isSettings),
             bootstrapper = SimpleBootstrapper(Action.LoadSettings),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
@@ -77,13 +76,12 @@ class UserConfigStoreFactory(
             }
             Intent.OnDatePickerDismissed -> dispatch(Msg.HideDatePicker)
             Intent.OnDateOfBirthClicked -> dispatch(Msg.ShowDatePicker)
+            Intent.OnDeleteClicked -> onDeleteUserClicked()
         }
 
         private fun saveSettings(firstName: String, lastName: String, middleName: String, dateOfBirth: LocalDate) {
             lceFlow {
                 val userId = settings.getLongOrNull(SETTINGS_USER_ID)
-
-                Logger.d { "UserId: $userId" }
 
                 val user = User(
                     id = userId ?: 0L,
@@ -130,6 +128,11 @@ class UserConfigStoreFactory(
                     }
                 }
                 .launchIn(scope)
+        }
+
+        private fun onDeleteUserClicked() {
+            settings[SETTINGS_USER_ID] = null
+            publish(Label.NavigateBack)
         }
     }
 
